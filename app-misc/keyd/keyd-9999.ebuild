@@ -33,9 +33,10 @@ HOMEPAGE="https://github.com/rvaiya/${PN}"
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/rvaiya/${PN}.git"
+	KEYWORDS="~amd64 nightly"
 else
 	SRC_URI="https://github.com/rvaiya/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="amd64 ~riscv ~x86"
+	KEYWORDS="amd64"
 fi
 
 # Source directory; the dir where the sources can be found (automatically
@@ -79,7 +80,6 @@ SLOT="0"
 # exists for.  If the package was for an x86 binary package, then
 # KEYWORDS would be set like this: KEYWORDS="-* x86"
 # Do not use KEYWORDS="*"; this is not valid in an ebuild context.
-KEYWORDS="amd64"
 
 # Comprehensive list of any and all USE flags leveraged in the ebuild,
 # with some exceptions, e.g., ARCH specific flags like "amd64" or "ppc".
@@ -104,7 +104,7 @@ PATCHES=(
 # had installed on your system when you tested the package.  Then
 # other users hopefully won't be caught without the right version of
 # a dependency.
-RDEPEND="acct-group/keyd"
+RDEPEND="acct-group/${PN}"
 
 # Build-time dependencies that need to be binary compatible with the system
 # being built (CHOST). These include libraries that we link against.
