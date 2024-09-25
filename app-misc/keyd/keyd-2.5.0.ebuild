@@ -119,10 +119,19 @@ RDEPEND="acct-group/${PN}"
 # 	
 # }
 
-src_compile()
+src_prepare()
 {
+	tar -xf "${P}.tar.gz"
+	rm "${P}.tar.gz"
+	mv "${P}" "build"
+	cd build
 	sed -i "s/\/etc\/init.d\/${PN}/${PN}.svc/g" Makefile
 	sed -i "s/-groupadd/#-groupadd/g" Makefile
+		
+}
+src_compile()
+{
+	src_prepare
 	emake DESTDIR=${D} PREFIX=/usr
 }
 
