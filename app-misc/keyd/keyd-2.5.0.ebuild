@@ -30,14 +30,17 @@ HOMEPAGE="https://github.com/rvaiya/${PN}"
 
 # Point to any required sources; these will be automatically downloaded by
 # Portage.
-if [[ ${PV} == 9999 ]]; then
-	inherit git-r3
-	EGIT_REPO_URI="https://github.com/rvaiya/${PN}.git"
-	KEYWORDS="~amd64 nightly"
-else
-	SRC_URI="https://github.com/rvaiya/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="amd64"
-fi
+# if [[ ${PV} == 9999 ]]; then
+# 	inherit git-r3
+# 	EGIT_REPO_URI="https://github.com/rvaiya/${PN}.git"
+# 	KEYWORDS="~amd64 nightly"
+# else
+# 	SRC_URI="https://github.com/rvaiya/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+# 	KEYWORDS="amd64"
+# fi
+
+SRC_URI="https://github.com/rvaiya/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+KEYWORDS="amd64"
 
 # Source directory; the dir where the sources can be found (automatically
 # unpacked) inside ${WORKDIR}.  The default value for S is ${WORKDIR}/${P}
@@ -91,10 +94,10 @@ IUSE=""
 #RESTRICT="strip"
 
 
-PATCHES=(
-	"${FILESDIR}/0001-Addition-of-OpenRC-Support.patch"
-	"${FILESDIR}/0002-ReadME-OpenRC-Installation-Section-Addition.patch"	
-)
+# PATCHES=(
+# 	"${FILESDIR}/0001-Addition-of-OpenRC-Support.patch"
+# 	"${FILESDIR}/0002-ReadME-OpenRC-Installation-Section-Addition.patch"	
+# )
 
 # Run-time dependencies. Must be defined to whatever this depends on to run.
 # Example:
@@ -119,24 +122,27 @@ RDEPEND="acct-group/${PN}"
 # 	
 # }
 
-src_prepare()
-{
-	tar -xf "${P}.tar.gz"
-	rm "${P}.tar.gz"
-	mv "${P}" "build"
-	cd build
-	sed -i "s/\/etc\/init.d\/${PN}/${PN}.svc/g" Makefile
-	sed -i "s/-groupadd/#-groupadd/g" Makefile
-		
-}
 src_compile()
 {
-	src_prepare
+	# # mv ${PN}.service.in ${PN}.systemd.in
+	# touch ${PN}.openrc.in
+	# echo '#!/sbin/openrc-run' > ${PN}.openrc.in
+	# echo 'name="keyd"' >> ${PN}.openrc.in
+	# echo 'description="key remapping daemon"' >> ${PN}.openrc.in
+	# echo 'command="keyd"' >> ${PN}.openrc.in
+	# echo 'command_background=true' >> ${PN}.openrc.in
+	# echo 'command_user=root:root' >> ${PN}.openrc.in
+	# echo 'pidfile="/run/keyd.pid"' >> ${PN}.openrc.in
+
+	sed -i 's/\/usr\/local/\/usr/g' Makefile
+	sed -i '/-groupadd keyd/d'  Makefile
+	sed -i '/-groupdel keyd/d'  Makefile
+	
 	emake DESTDIR=${D} PREFIX=/usr
 }
 
 src_install()
 {
 	emake install DESTDIR=${D} PREFIX=/usr
-	newinitd "${PN}.svc" "${PN}"
+	# newinitd "${PN}.svc" "${PN}"
 } 
