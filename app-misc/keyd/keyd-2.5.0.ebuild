@@ -26,7 +26,7 @@ EAPI=8
 DESCRIPTION="A key remapping daemon for linux"
 
 # Homepage, not used by Portage directly but handy for developer reference
-HOMEPAGE="https://github.com/danilanosikov/${PN}"
+HOMEPAGE="https://github.com/marble-os/${PN}"
 
 # Point to any required sources; these will be automatically downloaded by
 # Portage.
@@ -39,7 +39,7 @@ HOMEPAGE="https://github.com/danilanosikov/${PN}"
 # 	KEYWORDS="amd64"
 # fi
 
-SRC_URI="https://github.com/danilanosikov/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/marble-os/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 KEYWORDS="amd64"
 
 # Source directory; the dir where the sources can be found (automatically
@@ -118,22 +118,16 @@ RDEPEND="acct-group/${PN}"
 # only need to be present in the native build system (CBUILD). Example:
 #BDEPEND="virtual/pkgconfig"
 
-# src_configure() {
-# 	
-# }
-
-
 src_compile()
 {
-
-	sed -i 's/-group/# -group/g' Makefile
-	#sed -i 's/\/etc\/init.d\/${PN}/${PN}.svc/g' Makefile
-	sed -i 's/\/usr\/local/\/usr/g' Makefile
+	sed -i "s/-group/# -group/g" makefile
+	# sed -i "/install -m755 keyd.svc \/etc\/init.d\/keyd/d" makefile
+	# sed -i "/\/etc\/init.d\/keyd/d" makefile
 	emake DESTDIR=${D} PREFIX=/usr
 }
 
 src_install()
 {
+	# newinitd "${PN}.svc" "${PN}"
 	emake install DESTDIR=${D} PREFIX=/usr
-	#newinitd "${PN}.svc" "${PN}"
 } 
