@@ -26,7 +26,7 @@ EAPI=8
 DESCRIPTION="A key remapping daemon for linux"
 
 # Homepage, not used by Portage directly but handy for developer reference
-HOMEPAGE="https://github.com/rvaiya/${PN}"
+HOMEPAGE="https://github.com/danilanosikov/${PN}"
 
 # Point to any required sources; these will be automatically downloaded by
 # Portage.
@@ -39,7 +39,7 @@ HOMEPAGE="https://github.com/rvaiya/${PN}"
 # 	KEYWORDS="amd64"
 # fi
 
-SRC_URI="https://github.com/rvaiya/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/danilanosikov/${PN}/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 KEYWORDS="amd64"
 
 # Source directory; the dir where the sources can be found (automatically
@@ -122,22 +122,12 @@ RDEPEND="acct-group/${PN}"
 # 	
 # }
 
-PATCHES=(
-	"${FILESDIR}/0001-fx.patch"
-)
 
 src_compile()
 {
-	# # mv ${PN}.service.in ${PN}.systemd.in
-	# touch ${PN}.openrc.in
-	# echo '#!/sbin/openrc-run' > ${PN}.openrc.in
-	# echo 'name="keyd"' >> ${PN}.openrc.in
-	# echo 'description="key remapping daemon"' >> ${PN}.openrc.in
-	# echo 'command="keyd"' >> ${PN}.openrc.in
-	# echo 'command_background=true' >> ${PN}.openrc.in
-	# echo 'command_user=root:root' >> ${PN}.openrc.in
-	# echo 'pidfile="/run/keyd.pid"' >> ${PN}.openrc.in
 
+	sed -i 's/-group/# -group/g' Makefile
+	sed -i 's/\/etc\/init.d\/${PN}/${PN}.svc/g' Makefile
 	sed -i 's/\/usr\/local/\/usr/g' Makefile
 	emake DESTDIR=${D} PREFIX=/usr
 }
