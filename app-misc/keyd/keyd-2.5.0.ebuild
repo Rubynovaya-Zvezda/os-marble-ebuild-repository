@@ -122,6 +122,10 @@ RDEPEND="acct-group/${PN}"
 # 	
 # }
 
+PATCHES=(
+	"${FILESDIR}/0001-Addition-of-OpenRC-Support.patch"
+)
+
 src_compile()
 {
 	# # mv ${PN}.service.in ${PN}.systemd.in
@@ -134,6 +138,7 @@ src_compile()
 	# echo 'command_user=root:root' >> ${PN}.openrc.in
 	# echo 'pidfile="/run/keyd.pid"' >> ${PN}.openrc.in
 
+	sed -i 's/\/etc\/init.d\/keyd/keyd/g' Makefile
 	sed -i 's/\/usr\/local/\/usr/g' Makefile
 	sed -i '/-groupadd keyd/d'  Makefile
 	sed -i '/-groupdel keyd/d'  Makefile
@@ -144,5 +149,5 @@ src_compile()
 src_install()
 {
 	emake install DESTDIR=${D} PREFIX=/usr
-	# newinitd "${PN}.svc" "${PN}"
+	newinitd "${PN}.svc" "${PN}"
 } 
