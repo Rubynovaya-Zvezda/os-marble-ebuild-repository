@@ -52,7 +52,7 @@ DESTDIR=${D}
 # License of the package.  This must match the name of file(s) in the
 # licenses/ directory.  For complex license combination see the developer
 # docs on gentoo.org for details.
-LICENSE="MIT/X Consortium License"
+LICENSE="GNU General Publick License v3"
 
 # The SLOT variable is used to tell Portage if it's OK to keep multiple
 # versions of the same package installed at the same time.  For example,
