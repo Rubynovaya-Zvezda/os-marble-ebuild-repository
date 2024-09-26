@@ -44,8 +44,8 @@ KEYWORDS="amd64"
 
 # Source directory; the dir where the sources can be found (automatically
 # unpacked) inside ${WORKDIR}.  The default value for S is ${WORKDIR}/${P}
-# If you don't need to change it, leave the S= line out of the ebuild
 # to keep it tidy.
+# If you don't need to change it, leave the S= line out of the ebuild
 S="${WORKDIR}/${P}"
 
 
@@ -128,6 +128,6 @@ src_compile()
 
 src_install()
 {
-	# newinitd "${PN}.svc" "${PN}"
+	# newinitd "keyd.openrc.in" "${PN}"
 	emake install DESTDIR=${D} PREFIX=/usr
 } 
