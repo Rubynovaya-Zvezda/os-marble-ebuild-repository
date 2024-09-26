@@ -23,7 +23,7 @@ EAPI=8
 # Take a look at the eclass/ directory for more examples.
 
 # Short one-line description of this package.
-DESCRIPTION="Misc and config language for hyprland ecosystem"
+DESCRIPTION="A key remapping daemon for linux"
 
 # Homepage, not used by Portage directly but handy for developer reference
 HOMEPAGE="https://github.com/hyprwm/${PN}"
@@ -39,21 +39,20 @@ HOMEPAGE="https://github.com/hyprwm/${PN}"
 # 	KEYWORDS="amd64"
 # fi
 
-
-EGIT_REPO_URI="https://github.com/hyprwm/${PN}.git"
-KEYWORDS="~amd64"
+SRC_URI="https://github.com/hyprwm/${PN}/archive/refs/tags/v${PV}.tar.gz -> ${P}.tar.gz"
+KEYWORDS="amd64"
 
 # Source directory; the dir where the sources can be found (automatically
 # unpacked) inside ${WORKDIR}.  The default value for S is ${WORKDIR}/${P}
 # to keep it tidy.
 # If you don't need to change it, leave the S= line out of the ebuild
 S="${WORKDIR}/${P}"
-DESTDIR=${D}
+
 
 # License of the package.  This must match the name of file(s) in the
 # licenses/ directory.  For complex license combination see the developer
 # docs on gentoo.org for details.
-LICENSE="GNU General Public License v3"
+LICENSE="MIT/X Consortium License"
 
 # The SLOT variable is used to tell Portage if it's OK to keep multiple
 # versions of the same package installed at the same time.  For example,
@@ -88,7 +87,7 @@ SLOT="0"
 # Comprehensive list of any and all USE flags leveraged in the ebuild,
 # with some exceptions, e.g., ARCH specific flags like "amd64" or "ppc".
 # Not needed if the ebuild doesn't use any USE flags.
-IUSE="X"
+IUSE=""
 
 # A space delimited list of portage features to restrict. man 5 ebuild
 # for details.  Usually not needed.
@@ -108,14 +107,12 @@ IUSE="X"
 # had installed on your system when you tested the package.  Then
 # other users hopefully won't be caught without the right version of
 # a dependency.
-
-XDEPS="x11-base/xwayland x11-libs/xcb-util-errors x11-libs/libxcb x11-libs/xcb-util-wm x11-libs/xcb-util-renderutil"
-RDEPEND="gui-libs/hyprland-protocols dev-build/meson dev-libs/wayland dev-libs/wayland-protocols media-libs/vulkan-loader x11-libs/libdrm dev-libs/libinput x11-libs/xkbcommon virtual/udev x11-libs/pixman sys-auth/seatd ${XDEPS}"
+RDEPEND="x11-base/xwayland gui-libs/hyprwayland-scanner gui-libs/hyprutils"
 
 # Build-time dependencies that need to be binary compatible with the system
 # being built (CHOST). These include libraries that we link against.
 # The below is valid if the same run-time depends are required to compile.
-DEPEND="${RDEPEND}"
+#DEPEND="${RDEPEND}"
 
 # Build-time dependencies that are executed during the emerge process, and
 # only need to be present in the native build system (CBUILD). Example:
@@ -124,10 +121,12 @@ DEPEND="${RDEPEND}"
 src_compile()
 {
 	mkdir build
-	meson -Dprefix=${DESTDIR}/usr build
+	cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -DNO_SYSTEMD:STRING=true -DCMAKE_INSTALL_PREFIX:PATH=${DESTDIR}/usr -B build -G Ninja
+	cmake --build ./build --config Release --target all
 }
 
 src_install()
 {
-	ninja -C build install
+	# newinitd "keyd.openrc.in" "${PN}"
+	cmake --install ./build
 } 
