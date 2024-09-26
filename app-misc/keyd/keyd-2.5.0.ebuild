@@ -123,7 +123,7 @@ RDEPEND="acct-group/${PN}"
 # }
 
 PATCHES=(
-	"${FILESDIR}/0001-Addition-of-OpenRC-Support.patch"
+	"${FILESDIR}/0001-fx.patch"
 )
 
 src_compile()
@@ -138,11 +138,7 @@ src_compile()
 	# echo 'command_user=root:root' >> ${PN}.openrc.in
 	# echo 'pidfile="/run/keyd.pid"' >> ${PN}.openrc.in
 
-	sed -i 's/\/etc\/init.d\/keyd/keyd/g' Makefile
 	sed -i 's/\/usr\/local/\/usr/g' Makefile
-	sed -i '/-groupadd keyd/d'  Makefile
-	sed -i '/-groupdel keyd/d'  Makefile
-	
 	emake DESTDIR=${D} PREFIX=/usr
 }
 
