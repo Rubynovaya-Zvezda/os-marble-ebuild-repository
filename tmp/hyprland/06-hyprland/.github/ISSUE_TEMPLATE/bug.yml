@@ -1,0 +1,74 @@
+name: Bug Report
+description: Something is not working right
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Before opening a new issue, please take a moment to search through the current open and closed issues to check if it already exists.
+
+        ---
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Regression?
+      description: |
+        Regression means that something used to work but no longer does.
+        **BEFORE CONTINUING**, please check if this bug is a regression or not, and if it is, we need you to bisect with the help of the wiki: https://wiki.hyprland.org/Crashes-and-Bugs/#bisecting-an-issue
+      multiple: true
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+
+  - type: textarea
+    id: ver
+    attributes:
+      label: System Info and Version
+      description: |
+        Paste the output of `hyprctl systeminfo -c` here (If you are on a 
+        version that shows you help menu, omit the `-c` and attach config files
+        to the issue). If you have configs outside of the main config shown 
+        here, please attach.
+      value: "<details>
+        <summary>System/Version info</summary>
+
+
+        ```sh
+        
+        <Paste the output of the command here>
+
+        ```
+
+
+        </details>"
+    validations:
+      required: true
+
+  - type: textarea
+    id: desc
+    attributes:
+      label: Description
+      description: "What went wrong?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      description: "How can someone else reproduce the issue?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Crash reports, logs, images, videos
+      description: |
+        Anything that can help. Please always ATTACH and not paste them.
+        Logs can be found in $XDG_RUNTIME_DIR/hypr
+        Crash reports are stored in ~/.cache/hyprland or $XDG_CACHE_HOME/hyprland
+
