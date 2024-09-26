@@ -127,7 +127,7 @@ src_compile()
 {
 
 	sed -i 's/-group/# -group/g' Makefile
-	sed -i 's/\/etc\/init.d\/${PN}/${PN}.svc/g' Makefile
+	#sed -i 's/\/etc\/init.d\/${PN}/${PN}.svc/g' Makefile
 	sed -i 's/\/usr\/local/\/usr/g' Makefile
 	emake DESTDIR=${D} PREFIX=/usr
 }
@@ -135,5 +135,5 @@ src_compile()
 src_install()
 {
 	emake install DESTDIR=${D} PREFIX=/usr
-	newinitd "${PN}.svc" "${PN}"
+	#newinitd "${PN}.svc" "${PN}"
 } 
